@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   ADD YOUR NAME / SECTION NUMBER HERE
+ *   Gianna Dubinski / COMP 272-001
  *
  *   This java file contains the problem solutions of canFinish and
  *   numGroups methods.
@@ -81,10 +81,52 @@ class ProblemSolutions {
         ArrayList<Integer>[] adj = getAdjList(numExams, 
                                         prerequisites); 
 
-        // ADD YOUR CODE HERE - ADD YOUR NAME / SECTION AT TOP OF FILE
-        return false;
+        //Track visited nodes and nodes in current stack
+        boolean[] visited = new boolean[numNodes];
+        boolean[] recStack = new boolean[numNodes];
 
+        //For loop to check for cycles in each unchecked node
+        for (int i = 0; i < numNodes; i++) {
+
+            //If statement to see if method has a cycle from the vertex, return false
+            if (hasCycle(i, adj, visited, recStack)) {
+                return false;
+            }
+        }
+
+        return true;
     }
+
+    //Second method to detect cycles
+    private boolean hasCycle(int node, ArrayList<Integer>[] adj, boolean[] visited, boolean[] recStack) {
+
+        //If statement to see if node is in recursion stack
+        if (recStack[node]) {
+            return true;
+        }
+
+        //If statement to check if user has already visited
+        if (visited[node]) {
+            return false;
+        }
+
+        //Used a marks to see visited and in recursion stack are true
+        visited[node] = true;
+        recStack[node] = true;
+
+        //For loop for checking all the adjacent nodes
+        for (int neighbor : adj[node]) {
+
+            //If statement to see if the cycle is in the neighbor, return true.
+            if (hasCycle(neighbor, adj, visited, recStack)) {
+                return true;
+            }
+        }
+
+        //Removing from recursion stack
+        recStack[node] = false;
+        return false;
+    
 
 
     /**
@@ -190,9 +232,47 @@ class ProblemSolutions {
             }
         }
 
-        // YOUR CODE GOES HERE - you can add helper methods, you do not need
-        // to put all code in this method.
-        return -1;
+        //Tracked the visited nodes
+        boolean[] visited = new boolean[numNodes];
+
+        //Initializing the count of groups
+        int groups = 0;
+
+        //For loop to iterate all the nodes
+        for (int node = 0; node < numNodes; node++) {
+
+            //If statement for if the node is not visited, start a new group
+            if (!visited[node]) {
+
+                //DFS to mark all connected nodes
+                dfs(node, graph, visited);
+
+                groups++;
+            }
+        }
+
+        return groups;
+    }
+
+    //Method for dfs
+    private void dfs(int node, Map<Integer,List<Integer>> graph, boolean[] visited) {
+
+        //Used to mark current node as visited
+        visited[node] = true;
+
+        //If statement for if the node is not in graph, skip
+        if (!graph.containsKey(node)) {
+            return;
+        }
+
+        //For loop for looking at all adjacent nodes
+        for (int neighbor : graph.get(node)) {
+
+            //If statement for if neighbor is not visited, explore
+            if (!visited[neighbor]) {
+                dfs(neighbor, graph, visited);
+            }
+        }
     }
 
 }
