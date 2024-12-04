@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Gianna Dubinski / COMP 272-001
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -104,7 +104,33 @@ public class Graph {
   
   public int findRoot() {
 
-    // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME/SECTION AT TOP OF FILE
-    return -1;
+    int[] incomingEdges = new int[numVertices];
+
+        // For loop for counting the edges for each vertex
+        for (int i = 0; i < numVertices; i++) {
+
+            //For loop for counting the edges for each dest node
+            for (Integer dest : adjListArr[i]) {
+                incomingEdges[dest]++;
+            }
+        }
+
+        //Initializing to find vertices with zero incoming edges
+        int rootCount = 0;
+        int rootVertex = -1;
+
+        //For loop for counting the incoming edges for each vertex
+        for (int i = 0; i < numVertices; i++) {
+
+            //If statement for if the vertex has no incoming edges, it increments the count of root vertices and sets
+            if (incomingEdges[i] == 0) {
+                rootCount++;
+                rootVertex = i;
+            }
+        }
+
+        // If more than one root or no root, return -1
+        return rootCount == 1 ? vertexValues.get(rootVertex) : -1;
   } 
+
 }
